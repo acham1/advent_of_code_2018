@@ -2,8 +2,6 @@
 
 import sys
 
-line = sys.stdin.readline().strip()
-
 def reacts(a, b):
 	return (a.lower() == b or b.lower() == a) and a != b
 
@@ -16,4 +14,6 @@ def react(line):
 			last += char
 	return last
 
-print(len(react(line)))
+if __name__ == "__main__":	
+	line = sys.stdin.readline().strip()
+	print(len(react(line)))
