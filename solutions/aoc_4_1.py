@@ -58,8 +58,7 @@ default_stat = lambda: {'total': 0, 'tally': defaultdict(int)}
 
 pattern = re.compile('\A\[\S+ \d+:(\d+)\] (\D+(\d+)?\D+)\Z')
 
-if __name__ == '__main__':
-	entries = sorted(line.strip() for line in sys.stdin)
+def build_stats(entries):
 	stats = defaultdict(default_stat)
 	current_guard, start_time = 0, 0
 	for entry in entries:
@@ -73,6 +72,11 @@ if __name__ == '__main__':
 			stats[current_guard]['total'] += minute - start_time
 			for time in range(start_time, minute):
 				stats[current_guard]['tally'][time] += 1
+	return stats
+
+if __name__ == '__main__':
+	entries = sorted(line.strip() for line in sys.stdin)
+	stats = build_stats(entries)
 	sleepy_guard = max(
 		stats, 
 		key=lambda x: stats[x]['total'])
