@@ -40,6 +40,7 @@
 
 # What is the size of the largest area that isn't infinite?
 
+import queue
 import sys
 
 class _Pair:
@@ -57,19 +58,32 @@ class _Pair:
 
 class _IterBoard:
 	def __init__(self, pairs):
-		self.candidates = set(pairs)
+		self.pairs = pairs
 		self.minx = min(pairs, key=_access('x')).x
 		self.maxx = max(pairs, key=_access('x')).x
 		self.miny = min(pairs, key=_access('y')).y
 		self.maxy = max(pairs, key=_access('y')).y
-		self.ownership = dict() # pair => root pair
-		self.range = 0
-		self.regions = { pair: {pair} for pair in pairs} # pair => set<Pair>
+
+		self.candidates = set(pairs)
+		self.ownership = dict() # pair => rootpair
+		self.queue = {pair: [pair] for pair in pairs}
+		self.range = -1
+		self.regions = dict() # rootpair => set<Pair>
+
+	def max(self):
+		maxregion = max(
+			self.regions,
+			key=lambda x: len(self.regions[x]))
+		return (maxregion, len(self.regions[x]))
 
 	def step(self):
-		return 1
+		self.range += 1
+		for pair in self.pairs:
+			# TODO
+			return
 
 	def completed(self):
+		# TODO
 		return True
 
 def _access(name):
@@ -80,5 +94,5 @@ if __name__ == '__main__':
 	board = _IterBoard(pairs)
 	while not board.completed():
 		board.step()
-	maxregion = max(len(board.regions[key]) for key in board.regions)
+	_, maxsize = board.max()
 	print(maxregion)
